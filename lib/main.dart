@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -46,7 +47,16 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _takeScreenshot() async {
-    final imageFile = await _screenshotController.capture();
-    //Share.shareFiles([imageFile!.path], text: "Shared from #FlutterApp");
+    final _path = (await getApplicationDocumentsDirectory()).path;
+    String fileName = 'my_screenshot.jpg';
+
+    final _myScreenShotPath = await _screenshotController.captureAndSave(
+      _path, //set path where screenshot will be saved
+      fileName: fileName,
+    );
+
+    print("path of screenshot: $_myScreenShotPath");
+
+    Share.shareFiles([_myScreenShotPath!], text: "Shared from #FlutterApp");
   }
 }
